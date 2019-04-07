@@ -17,7 +17,7 @@
 
 ## 2. watch
 
-- **_watch :_ ** breakpoint로 선언한 코드에서의 **변수나 표현식의 상태를 관찰한다.**
+- **_watch :_** breakpoint로 선언한 코드에서의 **변수나 표현식의 상태를 관찰한다.**
   - 좌측의 **WATCH** 에서 추가한 변수(i)와 표현식(if문)의 결과를 확인할 수 있다.
 
 ![watch](https://user-images.githubusercontent.com/18614517/55672039-46c16780-58d1-11e9-9d67-9c1abbd26bd2.png)
@@ -67,7 +67,7 @@
 
   - **(Step into 실행 후)** multiply()함수의 첫 줄에서 멈춘 걸 확인할 수 있다.
 
-    ![step into_after](https://user-images.githubusercontent.com/18614517/55678933-28915100-593d-11e9-8c98-3213defaaabe.png)
+    <img width="1003" alt="step into_after" src="https://user-images.githubusercontent.com/18614517/55679149-32b54e80-5941-11e9-95b0-8cb0912c1191.png">
 
 ---
 
@@ -77,4 +77,4 @@
     ![step out_before](https://user-images.githubusercontent.com/18614517/55679028-aa35ae80-593e-11e9-8e96-f67321917daa.png)
 
   - **(Step out 실행 후)** printSquare()함수를 끝내고 다음 명령문에서 멈춘 걸 확인할 수 있다.  
-    ![step out_after](https://user-images.githubusercontent.com/18614517/55679034-c6d1e680-593e-11e9-92f2-34ec986c14d6.png)
+    <img width="1003" alt="step out_after" src="https://user-images.githubusercontent.com/18614517/55679160-6c865500-5941-11e9-9df4-04eec65c6e5b.png">
