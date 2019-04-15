@@ -1,6 +1,7 @@
-//1. 아래의 데이터 중 숫자 타입으로만 구성된 요소를 뽑아 배열을 만드세요.
+//3-1-1. 숫자 타입으로만 구성된 요소를 뽑아 배열을 만드세요.
 
 const data = {
+  debug: "on",
   window: {
     title: "Sample Konfabulator Widget",
     name: "main_window",
@@ -8,7 +9,7 @@ const data = {
     height: 500
   },
   image: {
-    src: "Images/Sun.png",
+    src: "Imasges/Sun.png",
     name: "sun1",
     hOffset: 250,
     vOffset: 250,
