@@ -30,42 +30,35 @@ const todos = [
     id: 312323555
   }
 ];
-function isObject(value) {
-  return value && typeof value === "object" && value.constructor === Object;
-}
 
 function printResult(data, text) {
-  let result;
+  let str;
   if (text === "all") {
-    let base = `현재 상태 : `;
-    result = Object.entries(data).reduce((p, c) => {
-      return (base += `${c[0]} : ${c[1]} `);
-    }, base);
-    console.log(result);
+    str = `현재 상태 : `;
+    str += Object.entries(data)
+      .map(v => `${v[0]} : ${v[1]}`)
+      .join(", ");
   } else {
-    let base = `${text} 리스트 : 총 ${data.length}건 : `;
-    data.forEach(v => (base += v));
-    console.log(base);
+    str = `${text} 리스트 : 총 ${data.length}건 : ${data.join(", ")}`;
   }
+  console.log(str);
 }
 
 function show(text) {
-  let obj = {};
+  let result;
   if (text === "all") {
-    todos.forEach(v => {
-      if (obj.hasOwnProperty(v.status)) {
-        obj[v.status] += 1;
-      } else {
-        obj[v.status] = 1;
-      }
-    });
-    printResult(obj, text);
-  } else if (text === "todo") {
-    let ret = [];
-    todos.filter(v => v.status === text).forEach(v => ret.push(v.name + ", "));
-    printResult(ret, text);
+    result = todos.reduce((p, c) => {
+      p[c.status] = p[c.status] + 1 || 1;
+      return p;
+    }, {});
+  } else {
+    result = [];
+    result = todos.filter(v => v.status === text).map(v => v.name);
   }
+  printResult(result, text);
 }
 
 show("all");
 show("todo");
+show("doing");
+show("done");
