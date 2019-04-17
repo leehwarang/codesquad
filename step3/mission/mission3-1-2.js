@@ -96,21 +96,16 @@ const data = [
 
 let result = [];
 
-const objtypeCheck = function(_array) {
-  _array.forEach(_obj => {
-    //배열 안에 있는 객체들을 순회하면서 검사
-    if (_obj.type === "sk") {
-      result.push(_obj.name);
+function objtypeCheck(data) {
+  data.forEach(v => {
+    if (v.type === "sk") {
+      result.push(v.name);
     }
-    if (_obj.childnode !== []) {
-      objtypeCheck(_obj.childnode);
-    }
-    if (_obj.childnode === []) {
-      return;
+    if (v.childnode.length > 0) {
+      objtypeCheck(v.childnode);
     }
   });
-};
+}
 
 objtypeCheck(data);
-
 console.log(result);
