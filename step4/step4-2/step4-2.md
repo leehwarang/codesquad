@@ -64,7 +64,7 @@ javascript는 브라우저안에서 되는 언어라는 걸 들어본 적 있을
 
 ## 계속 봐야 할 실행 예시
 
-**1. 비동기 상황 예**
+**1. 비동기 상황 예 - var 변수 선언**
 
 ```
 const baseData = [1,2,3,4,5,6,100];
@@ -78,7 +78,29 @@ const asyncRun = (arr, fn) => {
 asyncRun(baseData, idx =>console.log(idx));
 ```
 
-**2. 비동기 상황 예 - forEach로 변경**
+- 변수 i는 for문 내에서 var로 선언했기 때문에 **_스코프를 가지고 있지 않다._**
+- for문과 asyncRun()이 끝난 뒤에, setTimeout()으로 넘겨진 callback함수들이 callstack으로 올라와 하나씩 실행된다.
+- asyncRun()이 끝났지만 fn()과 i는 클로저(?)에 남아 있기 때문에 접근할 수 있다. 하지만 i는 스코프가 없는 상태여서 마지막 값인 7이 들어있게 된다.
+
+**2. 비동기 상황 예 - let 변수 선언**
+
+```
+const baseData = [1,2,3,4,5,6,100];
+
+const asyncRun = (arr, fn) => {
+ for(let i=0; i<arr.length; i++) {
+   setTimeout( () => fn(i), 1000);
+ }
+}
+
+asyncRun(baseData, idx =>console.log(idx));
+```
+
+- 변수 i는 for문 내에서 let로 선언했기 때문에 **_블록 스코프를 가진다._**
+- for문과 asyncRun()이 끝난 뒤에, setTimeout()으로 넘겨진 callback함수들이 callstack으로 올라와 하나씩 실행된다.
+- asyncRun()이 끝났지만 fn()는 클로저에 남아있고, i는 스코프를 가지고 있는 상태기 때문에 우리가 원하는 결과를 얻을 수 있다.
+
+**3. 비동기 상황 예 - 1.을 forEach로 변경**
 
 ```
 const baseData = [1,2,3,4,5,6,100];
@@ -91,7 +113,10 @@ const asyncRun = (arr, fn) => {
 asyncRun(baseData, idx =>console.log(idx))
 ```
 
-**3. 비동기 상황 예 - 비동기 + 비동기**
+- 1.의 예시에서는 asyncRun()안에서 바로 for문이 실행되지만, 3.에서는 asyncRun()안에서 forEach가 실행 될 때 callback으로 익명 함수를 받는다. **_따라서 v, i는 함수 스코프를 가진다._**
+- asyncRun()이 끝났지만 fn()는 클로저에 남아있고, i는 스코프를 가지고 있는 상태기 때문에 우리가 원하는 결과를 얻을 수 있다.
+
+**4. 비동기 상황 예 - 비동기 + 비동기**
 
 ```
 const baseData = [1,2,3,4,5,6,100];
