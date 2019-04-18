@@ -26,7 +26,7 @@ console.log("hello");
 function foo(){
     console.log("happy")
 }
-setTimeout(() => {console.log("happy")}, 1000);
+setTimeout(foo, 1000);
 console.log("world!");
 
 // hello
@@ -35,7 +35,7 @@ console.log("world!");
 // happy
 ```
 
-`console.log("hello");`와 `console.log("world!");` 사이에 어떤 함수를 호출했을 뿐인데, 두 코드의 실행 순서가 다른 것을 확인할 수 있다. **foo()**는 JS engine이 실행하는 *일반적인 함수*일 뿐이고, **setTimeout()**은 JS engine이 Web API에게 넘겨 *비동기식으로 처리하는 함수*이기 때문이다.
+`console.log("hello");`와 `console.log("world!");` 사이에 어떤 함수를 호출했을 뿐인데, 두 코드의 실행 순서가 다른 것을 확인할 수 있다. **foo()**는 JS engine이 실행하는 *일반적인 함수*일 뿐이고, **setTimeout()**은 JS engine이 Web API에게 넘겨 *비동기식으로 처리하는 콜백 함수*이기 때문이다.
 
 ---
 
@@ -61,3 +61,58 @@ javascript는 브라우저안에서 되는 언어라는 걸 들어본 적 있을
 3. 넘겨진 콜백 함수가 불려지는 시점이 되면 **Event queue**로 이동한다.
 
 4. **Event Loop**가 Call Stack이 비어있는지 계속 검사하다가 비어 있다면, **Event queue에 있는 콜백 함수를 Call Stack으로 push한다.**
+
+## 계속 봐야 할 실행 예시
+
+**1. 비동기 상황 예**
+
+```
+const baseData = [1,2,3,4,5,6,100];
+
+const asyncRun = (arr, fn) => {
+ for(var i=0; i<arr.length; i++) {
+   setTimeout( () => fn(i), 1000);
+ }
+}
+
+asyncRun(baseData, idx =>console.log(idx));
+```
+
+**2. 비동기 상황 예 - forEach로 변경**
+
+```
+const baseData = [1,2,3,4,5,6,100];
+
+const asyncRun = (arr, fn) => {
+   arr.forEach((v,i) => {
+     setTimeout( () => fn(i), 1000);
+   });
+}
+asyncRun(baseData, idx =>console.log(idx))
+```
+
+**3. 비동기 상황 예 - 비동기 + 비동기**
+
+```
+const baseData = [1,2,3,4,5,6,100];
+
+const asyncRun = (arr, fn) => {
+   arr.forEach((v,i) => {
+     setTimeout(() => {
+       setTimeout(() => {
+         console.log("cb 2");
+         fn(i)
+        },1000);
+       console.log("cb 1");
+     }, 1000);
+   });
+
+   console.log("end");
+}
+
+asyncRun(baseData, idx => console.log(idx))
+```
+
+- setTimeout()은 callback 함수를 비동기적으로 실행하지만 forEach()는 callback 함수를 동기적으로 실행한다.
+- setTimeout()도 callstack에 올라오며, callback으로 받은 함수를 WEB API에 넘긴 후, setTimeout()은 callstack에서 사라진다.
+- forEach()와 asyncRun()가 callstack에서 빠졌음에도 `fn(i)`을 실행했을 때 참조할 수 있는 이유는 scope, closure? 때문이라고 함
