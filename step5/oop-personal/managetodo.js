@@ -1,22 +1,10 @@
 const Todo = require("./todo.js");
+const Msg = require("./msg.js");
 
 function ManageTodo() {
   this.managedTodoList = [];
+  this.msgObj = new Msg();
 }
-
-ManageTodo.prototype.printResult = function(result, query) {
-  let str;
-  if (query === "all") {
-    str = "현재 상태 : ";
-    str += Object.entries(result)
-      .map(value => `${value[0]} : ${value[1]}개`)
-      .join(", ");
-  } else {
-    str = `${query} 리스트 : 총 ${result.length}건 : `;
-    str += result.map(value => value.name).join(", ");
-  }
-  console.log(str);
-};
 
 ManageTodo.prototype.show = function(query) {
   let result;
@@ -28,13 +16,15 @@ ManageTodo.prototype.show = function(query) {
   } else {
     result = this.managedTodoList.filter(todo => todo.status === query);
   }
-  this.printResult(result, query);
+  // this.printResult(result, query);
+  this.msgObj.showMsg(result, query);
 };
 
 ManageTodo.prototype.add = function(name, tags, status = "todo") {
-  this.managedTodoList.push(new Todo(name, tags, status));
-  console.log(this.managedTodoList);
+  const newTodo = new Todo(name, tags, status);
+  this.managedTodoList.push(newTodo);
   //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 ManageTodo.prototype이 아닌 인스턴스에 바인딩함
+  this.msgObj.addMsg(newTodo);
 };
 
 ManageTodo.prototype.delete = function(deleteId) {
@@ -43,20 +33,15 @@ ManageTodo.prototype.delete = function(deleteId) {
   const targetIndex = this.managedTodoList.findIndex(
     todo => todo.id === deleteId
   );
-  console.log(targetTodo, targetIndex);
   this.managedTodoList.splice(1, 1);
-  console.log(
-    `${targetTodo.name}이(가) ${targetTodo.status} 목록에서 삭제 되었습니다.`
-  );
+  this.msgObj.deleteMsg(targetTodo);
 };
 
 ManageTodo.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   targetTodo.status = changeStatus;
-  console.log(
-    `${targetTodo.name}의 상태가 ${changeStatus}(으)로 변경 되었습니다.`
-  );
+  this.msgObj.updateMsg(targetTodo);
 };
 
 module.exports = ManageTodo;
