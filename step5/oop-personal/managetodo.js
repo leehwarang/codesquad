@@ -25,7 +25,6 @@ ManageTodo.prototype.add = function(name, tags, status = "todo") {
   const newTodo = new Todo(name, tags, status);
   this.managedTodoList.push(newTodo);
   //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 ManageTodo.prototype이 아닌 인스턴스에 바인딩함
-  // this.managedTodoList.print(this.msgObj.addMsg(newTodo), 1000);
   this.msgObj.addMsg(newTodo);
   setTimeout(() => this.show("all"), 1000);
 };
@@ -45,8 +44,10 @@ ManageTodo.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   targetTodo.status = changeStatus;
-  this.msgObj.updateMsg(targetTodo);
-  setTimeout(() => this.show("all"), 1000);
+  setTimeout(() => {
+    this.msgObj.updateMsg(targetTodo);
+    setTimeout(() => this.show("all"), 1000);
+  }, 3000);
 };
 
 module.exports = ManageTodo;
