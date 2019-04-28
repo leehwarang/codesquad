@@ -5,7 +5,11 @@ PrintMsg.prototype.showMsg = function(result, query) {
   if (query === "all") {
     str = "현재 상태 : ".concat(result);
   } else {
-    str = `${query} 리스트 : 총 ${result}건`;
+    str = `${query} 리스트 : 총 ${result.length}건 : `;
+    str += result.reduce((acc, cur) => {
+      acc += cur.name;
+      return acc;
+    }, "");
   }
   console.log(str);
 };

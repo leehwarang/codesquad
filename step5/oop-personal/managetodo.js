@@ -15,7 +15,7 @@ ManageTodo.prototype.show = function(query) {
       .map(value => `${value[0]} : ${value[1]}개`)
       .join(", ");
   } else {
-    result = this.statusCnt[query];
+    result = this.managedTodoList.filter(todo => todo.status === query);
   }
   this.msgObj.showMsg(result, query);
   this.rl.prompt(); //exec.js에서 사용한 rl과 같은 인터페이스 사용
@@ -33,25 +33,49 @@ ManageTodo.prototype.add = function(name, tags, status = "todo") {
 ManageTodo.prototype.delete = function(deleteId) {
   deleteId = parseInt(deleteId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === deleteId);
-  const targetIndex = this.managedTodoList.findIndex(
-    todo => todo.id === deleteId
-  );
-  this.statusCnt[targetTodo.status] -= 1;
-  this.managedTodoList.splice(1, 1);
-  this.msgObj.deleteMsg(targetTodo);
-  setTimeout(() => this.show("all"), 1000);
+  try {
+    if (targetTodo === undefined) {
+      throw new Error(`삭제하고자 하는 ID(${deleteId})가 없습니다.`);
+    }
+    const targetIndex = this.managedTodoList.findIndex(
+      todo => todo.id === deleteId
+    );
+    this.statusCnt[targetTodo.status] -= 1;
+    this.managedTodoList.splice(1, 1);
+    this.msgObj.deleteMsg(targetTodo);
+    setTimeout(() => this.show("all"), 1000);
+  } catch (error) {
+    console.log(error.message);
+    this.rl.prompt();
+  }
 };
 
 ManageTodo.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
-  this.statusCnt[targetTodo.status] -= 1;
-  targetTodo.status = changeStatus;
-  this.statusCnt[changeStatus] += 1;
-  setTimeout(() => {
-    this.msgObj.updateMsg(targetTodo);
-    setTimeout(() => this.show("all"), 1000);
-  }, 3000);
+  try {
+    if (targetTodo === undefined) {
+      throw new Error(`수정하고자 하는 ID(${updateId})가 없습니다.`);
+    }
+    if (targetTodo.status === changeStatus) {
+      throw new Error(
+        `현재 상태(${targetTodo.status})와 변경하려는 상태(${
+          targetTodo.status
+        })가 같습니다.`
+      );
+    }
+    this.statusCnt[targetTodo.status] -= 1;
+    targetTodo.status = changeStatus;
+    this.statusCnt[changeStatus] += 1;
+    setTimeout(() => {
+      this.msgObj.updateMsg(targetTodo);
+      setTimeout(() => this.show("all"), 1000);
+    }, 3000);
+  } catch (error) {
+    //error는 try문에서 발생한 에러 정보를 담고 있는 객체
+    console.log(error.message);
+    this.rl.prompt();
+  }
 };
 
 module.exports = ManageTodo;

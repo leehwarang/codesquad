@@ -14,5 +14,15 @@ rl.prompt();
 rl.on("line", line => {
   const funcName = line.split("$")[0];
   const args = line.split("$").slice(1);
-  managedTodo[funcName](...args);
+  try {
+    if (!["show", "add", "update", "delete"].includes(funcName)) {
+      throw new Error(
+        "잘못된 명령어 입니다. show, add, update, delete 중 하나의 함수를 호출해주세요."
+      );
+    }
+    managedTodo[funcName](...args);
+  } catch (error) {
+    console.log(error.message);
+    rl.prompt();
+  }
 });
