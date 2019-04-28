@@ -3,13 +3,9 @@ const PrintMsg = function() {};
 PrintMsg.prototype.showMsg = function(result, query) {
   let str;
   if (query === "all") {
-    str = "현재 상태 : ";
-    str += Object.entries(result)
-      .map(value => `${value[0]} : ${value[1]}개`)
-      .join(", ");
+    str = "현재 상태 : ".concat(result);
   } else {
-    str = `${query} 리스트 : 총 ${result.length}건 : `;
-    str += result.map(value => value.name).join(", ");
+    str = `${query} 리스트 : 총 ${result}건`;
   }
   console.log(str);
 };
