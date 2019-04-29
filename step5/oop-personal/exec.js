@@ -1,5 +1,6 @@
 const Todo = require("./todo.js");
 const ManageTodo = require("./managetodo.js");
+const Msg = require("./msg.js");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -7,6 +8,7 @@ const rl = readline.createInterface({
 });
 
 const managedTodo = new ManageTodo(rl);
+const msgObj = new Msg();
 
 rl.setPrompt("명령어를 입력하세요. :");
 rl.prompt();
@@ -16,9 +18,7 @@ rl.on("line", line => {
   const args = line.split("$").slice(1);
   try {
     if (!["show", "add", "update", "delete"].includes(funcName)) {
-      throw new Error(
-        "잘못된 명령어 입니다. show, add, update, delete 중 하나의 함수를 호출해주세요."
-      );
+      throw new Error(msgObj.getMethodNameErrorMsg());
     }
     managedTodo[funcName](...args);
   } catch (error) {

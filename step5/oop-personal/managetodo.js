@@ -35,7 +35,7 @@ ManageTodo.prototype.delete = function(deleteId) {
   const targetTodo = this.managedTodoList.find(todo => todo.id === deleteId);
   try {
     if (targetTodo === undefined) {
-      throw new Error(`삭제하고자 하는 ID(${deleteId})가 없습니다.`);
+      throw new Error(this.msgObj.getInvalidIdErrorMsg(deleteId));
     }
     const targetIndex = this.managedTodoList.findIndex(
       todo => todo.id === deleteId
@@ -55,13 +55,11 @@ ManageTodo.prototype.update = function(updateId, changeStatus) {
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   try {
     if (targetTodo === undefined) {
-      throw new Error(`수정하고자 하는 ID(${updateId})가 없습니다.`);
+      throw new Error(this.msgObj.getInvalidIdErrorMsg(updateId));
     }
     if (targetTodo.status === changeStatus) {
       throw new Error(
-        `현재 상태(${targetTodo.status})와 변경하려는 상태(${
-          targetTodo.status
-        })가 같습니다.`
+        this.msgObj.getCompareStatusErrorMsg(targetTodo, changeStatus)
       );
     }
     this.statusCnt[targetTodo.status] -= 1;
