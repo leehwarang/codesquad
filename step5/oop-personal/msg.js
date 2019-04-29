@@ -30,13 +30,17 @@ PrintMsg.prototype.getInvalidIdErrorMsg = function(id) {
   return `수정 또는 삭제 하고자 하는 ID(${id})가 없습니다.`;
 };
 
+PrintMsg.prototype.getInvalidStatusErrorMsg = function(status) {
+  return `더하거나 수정 하고자 하는 상태(${status})가 없습니다. todo, doing, done 중 하나의 상태로 입력하세요.`;
+};
+
 PrintMsg.prototype.getCompareStatusErrorMsg = function(
   targetTodo,
   changeStatus
 ) {
-  return `현재 상태(${targetTodo.status})와 변경하려는 상태(${
+  return `현재 상태(${
     targetTodo.status
-  })가 같습니다.`;
+  })와 변경하려는 상태(${changeStatus})가 같습니다.`;
 };
 
 PrintMsg.prototype.getMethodNameErrorMsg = function() {

@@ -1,10 +1,12 @@
 const Todo = require("./todo.js");
 const Msg = require("./msg.js");
+const TodoError = require("./todoerror.js");
 
 function ManageTodo(rl) {
   this.managedTodoList = [];
   this.msgObj = new Msg();
   this.rl = rl;
+  this.errorObj = new TodoError();
   this.statusCnt = { todo: 0, doing: 0, done: 0 };
 }
 
@@ -22,21 +24,25 @@ ManageTodo.prototype.show = function(query) {
 };
 
 ManageTodo.prototype.add = function(name, tags, status = "todo") {
-  const newTodo = new Todo(name, tags, status);
-  this.managedTodoList.push(newTodo);
-  this.statusCnt[newTodo.status] += 1;
-  //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 ManageTodo.prototype이 아닌 인스턴스에 바인딩함
-  this.msgObj.addMsg(newTodo);
-  setTimeout(() => this.show("all"), 1000);
+  try {
+    this.errorObj.isValidStatus(status);
+    const newTodo = new Todo(name, tags, status);
+    this.managedTodoList.push(newTodo);
+    this.statusCnt[newTodo.status] += 1;
+    //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 ManageTodo.prototype이 아닌 인스턴스에 바인딩함
+    this.msgObj.addMsg(newTodo);
+    setTimeout(() => this.show("all"), 1000);
+  } catch (error) {
+    console.log(error.message);
+    this.rl.prompt();
+  }
 };
 
 ManageTodo.prototype.delete = function(deleteId) {
   deleteId = parseInt(deleteId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === deleteId);
   try {
-    if (targetTodo === undefined) {
-      throw new Error(this.msgObj.getInvalidIdErrorMsg(deleteId));
-    }
+    this.errorObj.isValidId(targetTodo, deleteId);
     const targetIndex = this.managedTodoList.findIndex(
       todo => todo.id === deleteId
     );
@@ -54,14 +60,10 @@ ManageTodo.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   try {
-    if (targetTodo === undefined) {
-      throw new Error(this.msgObj.getInvalidIdErrorMsg(updateId));
-    }
-    if (targetTodo.status === changeStatus) {
-      throw new Error(
-        this.msgObj.getCompareStatusErrorMsg(targetTodo, changeStatus)
-      );
-    }
+    this.errorObj.isValidId(targetTodo, updateId);
+    this.errorObj.isValidStatus(changeStatus);
+    this.errorObj.compareStatus(targetTodo, changeStatus);
+
     this.statusCnt[targetTodo.status] -= 1;
     targetTodo.status = changeStatus;
     this.statusCnt[changeStatus] += 1;
