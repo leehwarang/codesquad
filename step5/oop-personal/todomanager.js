@@ -10,16 +10,34 @@ function TodoManager(rl) {
   this.statusCnt = { todo: 0, doing: 0, done: 0 };
 }
 
+TodoManager.prototype.countStatus = function() {
+  return Object.entries(this.statusCnt).reduce(
+    (acc, cur) => (acc += `${cur[0]} : ${cur[1]}개 `),
+    "현재 상태 : "
+  );
+};
+
+TodoManager.prototype.filterByStatus = function(query) {
+  //query에 해당하는 data가 this.statusCnt에서 몇 개인지 출력 -> 필요 없을 듯
+  //todolist 중 query에 해당하는 data가 몇 개인지 보고, 그 안의 name출력
+
+  const filteredTodoList = this.managedTodoList.filter(
+    todo => todo.status === query
+  );
+  return filteredTodoList.reduce(
+    (acc, cur) => (acc += cur.name),
+    `리스트 : 총 ${filteredTodoList.length} 건 : `
+  );
+};
+
 TodoManager.prototype.show = function(query) {
-  let result;
+  let outputStr;
   if (query === "all") {
-    result = Object.entries(this.statusCnt)
-      .map(value => `${value[0]} : ${value[1]}개`)
-      .join(", ");
+    outputStr = this.countStatus();
   } else {
-    result = this.managedTodoList.filter(todo => todo.status === query);
+    outputStr = this.filterByStatus(query);
   }
-  this.msgObj.showMsg(result, query);
+  this.msgObj.showMsg(outputStr);
   this.rl.prompt(); //exec.js에서 사용한 rl과 같은 인터페이스 사용
 };
 
@@ -46,11 +64,9 @@ TodoManager.prototype.delete = function(deleteId) {
     const targetIndex = this.managedTodoList.findIndex(
       todo => todo.id === deleteId
     );
+
     this.statusCnt[targetTodo.status] -= 1;
-    // this.managedTodoList.splice(1, 1);
-    this.managedTodoList = this.managedTodoList.map(
-      todo => todo.id !== deleteId
-    );
+    this.managedTodoList.splice(targetIndex, 1);
     this.msgObj.deleteMsg(targetTodo);
     setTimeout(() => this.show("all"), 1000);
   } catch (error) {

@@ -1,17 +1,7 @@
 const PrintMsg = function() {};
 
-PrintMsg.prototype.showMsg = function(result, query) {
-  let str;
-  if (query === "all") {
-    str = "현재 상태 : ".concat(result);
-  } else {
-    str = `${query} 리스트 : 총 ${result.length}건 : `;
-    str += result.reduce((acc, cur) => {
-      acc += cur.name;
-      return acc;
-    }, "");
-  }
-  console.log(str);
+PrintMsg.prototype.showMsg = function(outputStr) {
+  console.log(outputStr);
 };
 
 PrintMsg.prototype.addMsg = function(obj) {
