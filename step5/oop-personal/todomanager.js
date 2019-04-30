@@ -4,6 +4,7 @@ const TodoError = require("./todoerror.js");
 
 function TodoManager(rl) {
   this.managedTodoList = [];
+  this.methodList = ["show", "add", "delete", "update"];
   this.msgObj = new Msg();
   this.rl = rl;
   this.errorObj = new TodoError();
@@ -18,9 +19,6 @@ TodoManager.prototype.countStatus = function() {
 };
 
 TodoManager.prototype.filterByStatus = function(query) {
-  //query에 해당하는 data가 this.statusCnt에서 몇 개인지 출력 -> 필요 없을 듯
-  //todolist 중 query에 해당하는 data가 몇 개인지 보고, 그 안의 name출력
-
   const filteredTodoList = this.managedTodoList.filter(
     todo => todo.status === query
   );
@@ -43,7 +41,7 @@ TodoManager.prototype.show = function(query) {
 
 TodoManager.prototype.add = function(name, tags, status = "todo") {
   try {
-    this.errorObj.isValidStatus(status);
+    this.errorObj.isValidStatus(status, Object.keys(this.statusCnt));
     const newTodo = new Todo(name, tags, status);
     this.managedTodoList.push(newTodo);
     this.statusCnt[newTodo.status] += 1;

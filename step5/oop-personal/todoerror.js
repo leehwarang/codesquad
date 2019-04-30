@@ -1,23 +1,31 @@
 const Msg = require("./msg.js");
-const msgObj = new Msg();
-function TodoError() {}
+function TodoError() {
+  this.msgObj = new Msg();
+}
 
 TodoError.prototype.isValidId = function(targetTodo, id) {
   if (targetTodo === undefined) {
-    throw new Error(msgObj.getInvalidIdErrorMsg(id));
+    throw new Error(this.msgObj.getInvalidIdErrorMsg(id));
   }
 };
 
-TodoError.prototype.isValidStatus = function(status) {
-  //status가 todo, doing, done중 하나인지
-  if (!["todo", "doing", "done"].includes(status)) {
-    throw new Error(msgObj.getInvalidStatusErrorMsg(status));
+TodoError.prototype.isValidStatus = function(status, statusList) {
+  if (!statusList.includes(status)) {
+    throw new Error(this.msgObj.getInvalidStatusErrorMsg(status));
   }
 };
 
 TodoError.prototype.compareStatus = function(targetTodo, changeStatus) {
   if (targetTodo.status === changeStatus) {
-    throw new Error(msgObj.getCompareStatusErrorMsg(targetTodo, changeStatus));
+    throw new Error(
+      this.msgObj.getCompareStatusErrorMsg(targetTodo, changeStatus)
+    );
+  }
+};
+
+TodoError.prototype.isValidMethodName = function(methodName, methodList) {
+  if (!methodList.includes(methodName)) {
+    throw new Error(this.msgObj.getMethodNameErrorMsg());
   }
 };
 
