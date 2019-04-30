@@ -1,5 +1,5 @@
 const Todo = require("./todo.js");
-const ManageTodo = require("./managetodo.js");
+const TodoManager = require("./todomanager.js");
 const Msg = require("./msg.js");
 const readline = require("readline");
 const rl = readline.createInterface({
@@ -7,7 +7,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const managedTodo = new ManageTodo(rl);
+const todoManager = new TodoManager(rl);
 const msgObj = new Msg();
 
 rl.setPrompt("명령어를 입력하세요. :");
@@ -20,7 +20,7 @@ rl.on("line", line => {
     if (!["show", "add", "update", "delete"].includes(funcName)) {
       throw new Error(msgObj.getMethodNameErrorMsg());
     }
-    managedTodo[funcName](...args);
+    todoManager[funcName](...args);
   } catch (error) {
     console.log(error.message);
     rl.prompt();

@@ -2,7 +2,7 @@ const Todo = require("./todo.js");
 const Msg = require("./msg.js");
 const TodoError = require("./todoerror.js");
 
-function ManageTodo(rl) {
+function TodoManager(rl) {
   this.managedTodoList = [];
   this.msgObj = new Msg();
   this.rl = rl;
@@ -10,7 +10,7 @@ function ManageTodo(rl) {
   this.statusCnt = { todo: 0, doing: 0, done: 0 };
 }
 
-ManageTodo.prototype.show = function(query) {
+TodoManager.prototype.show = function(query) {
   let result;
   if (query === "all") {
     result = Object.entries(this.statusCnt)
@@ -23,13 +23,13 @@ ManageTodo.prototype.show = function(query) {
   this.rl.prompt(); //exec.js에서 사용한 rl과 같은 인터페이스 사용
 };
 
-ManageTodo.prototype.add = function(name, tags, status = "todo") {
+TodoManager.prototype.add = function(name, tags, status = "todo") {
   try {
     this.errorObj.isValidStatus(status);
     const newTodo = new Todo(name, tags, status);
     this.managedTodoList.push(newTodo);
     this.statusCnt[newTodo.status] += 1;
-    //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 ManageTodo.prototype이 아닌 인스턴스에 바인딩함
+    //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 TodoManager.prototype이 아닌 인스턴스에 바인딩함
     this.msgObj.addMsg(newTodo);
     setTimeout(() => this.show("all"), 1000);
   } catch (error) {
@@ -38,7 +38,7 @@ ManageTodo.prototype.add = function(name, tags, status = "todo") {
   }
 };
 
-ManageTodo.prototype.delete = function(deleteId) {
+TodoManager.prototype.delete = function(deleteId) {
   deleteId = parseInt(deleteId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === deleteId);
   try {
@@ -47,7 +47,10 @@ ManageTodo.prototype.delete = function(deleteId) {
       todo => todo.id === deleteId
     );
     this.statusCnt[targetTodo.status] -= 1;
-    this.managedTodoList.splice(1, 1);
+    // this.managedTodoList.splice(1, 1);
+    this.managedTodoList = this.managedTodoList.map(
+      todo => todo.id !== deleteId
+    );
     this.msgObj.deleteMsg(targetTodo);
     setTimeout(() => this.show("all"), 1000);
   } catch (error) {
@@ -56,7 +59,7 @@ ManageTodo.prototype.delete = function(deleteId) {
   }
 };
 
-ManageTodo.prototype.update = function(updateId, changeStatus) {
+TodoManager.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   try {
@@ -78,4 +81,4 @@ ManageTodo.prototype.update = function(updateId, changeStatus) {
   }
 };
 
-module.exports = ManageTodo;
+module.exports = TodoManager;
