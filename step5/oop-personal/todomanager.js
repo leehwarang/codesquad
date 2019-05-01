@@ -1,13 +1,11 @@
 const Todo = require("./todo.js");
-const Msg = require("./msg.js");
-const TodoError = require("./todoerror.js");
 
-function TodoManager(rl) {
+function TodoManager(rl, msgObj, errorObj) {
   this.managedTodoList = [];
   this.methodList = ["show", "add", "delete", "update"];
-  this.msgObj = new Msg();
   this.rl = rl;
-  this.errorObj = new TodoError();
+  this.msgObj = msgObj;
+  this.errorObj = errorObj;
   this.statusCnt = { todo: 0, doing: 0, done: 0 };
 }
 
