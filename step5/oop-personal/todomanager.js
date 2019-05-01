@@ -40,6 +40,7 @@ TodoManager.prototype.show = function(query) {
 };
 
 TodoManager.prototype.add = function(name, tags, status = "todo") {
+  tags = JSON.parse(tags);
   try {
     this.errorObj.isValidStatus(status, Object.keys(this.statusCnt));
     const newTodo = new Todo(name, tags, status);
@@ -78,7 +79,7 @@ TodoManager.prototype.update = function(updateId, changeStatus) {
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
   try {
     this.errorObj.isValidId(targetTodo, updateId);
-    this.errorObj.isValidStatus(changeStatus);
+    this.errorObj.isValidStatus(changeStatus, Object.keys(this.statusCnt));
     this.errorObj.compareStatus(targetTodo, changeStatus);
 
     this.statusCnt[targetTodo.status] -= 1;

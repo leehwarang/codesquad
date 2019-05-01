@@ -1,6 +1,5 @@
 const Todo = require("./todo.js");
 const TodoManager = require("./todomanager.js");
-const Msg = require("./msg.js");
 const TodoError = require("./todoerror.js");
 
 const readline = require("readline");
@@ -10,7 +9,6 @@ const rl = readline.createInterface({
 });
 
 const todoManager = new TodoManager(rl);
-const msgObj = new Msg();
 const todoError = new TodoError();
 
 rl.setPrompt("명령어를 입력하세요. :");
