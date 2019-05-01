@@ -20,6 +20,7 @@ TodoManager.prototype.filterByStatus = function(query) {
   const filteredTodoList = this.managedTodoList.filter(
     todo => todo.status === query
   );
+
   return filteredTodoList.reduce(
     (acc, cur) => (acc += cur.name),
     `리스트 : 총 ${filteredTodoList.length} 건 : `
@@ -28,11 +29,13 @@ TodoManager.prototype.filterByStatus = function(query) {
 
 TodoManager.prototype.show = function(query) {
   let outputStr;
+
   if (query === "all") {
     outputStr = this.countStatus();
   } else {
     outputStr = this.filterByStatus(query);
   }
+
   this.msgObj.showMsg(outputStr);
   this.rl.prompt(); //exec.js에서 사용한 rl과 같은 인터페이스 사용
 };
@@ -41,10 +44,13 @@ TodoManager.prototype.add = function(name, tags, status = "todo") {
   tags = JSON.parse(tags);
   try {
     this.errorObj.isValidStatus(status, Object.keys(this.statusCnt));
-    const newTodo = new Todo(name, tags, status);
+
+    const newTodo = new Todo({ name, tags, status });
+
     this.managedTodoList.push(newTodo);
     this.statusCnt[newTodo.status] += 1;
     //add 함수를 호출하는 실행부가 Mageger의 인스턴스이기 때문에, this는 TodoManager.prototype이 아닌 인스턴스에 바인딩함
+
     this.msgObj.addMsg(newTodo);
     setTimeout(() => this.show("all"), 1000);
   } catch (error) {
@@ -58,13 +64,16 @@ TodoManager.prototype.delete = function(deleteId) {
   const targetTodo = this.managedTodoList.find(todo => todo.id === deleteId);
   try {
     this.errorObj.isValidId(targetTodo, deleteId);
+
     const targetIndex = this.managedTodoList.findIndex(
       todo => todo.id === deleteId
     );
 
     this.statusCnt[targetTodo.status] -= 1;
     this.managedTodoList.splice(targetIndex, 1);
+
     this.msgObj.deleteMsg(targetTodo);
+
     setTimeout(() => this.show("all"), 1000);
   } catch (error) {
     console.log(error.message);
@@ -75,6 +84,7 @@ TodoManager.prototype.delete = function(deleteId) {
 TodoManager.prototype.update = function(updateId, changeStatus) {
   updateId = parseInt(updateId);
   const targetTodo = this.managedTodoList.find(todo => todo.id === updateId);
+
   try {
     this.errorObj.isValidId(targetTodo, updateId);
     this.errorObj.isValidStatus(changeStatus, Object.keys(this.statusCnt));
@@ -83,6 +93,7 @@ TodoManager.prototype.update = function(updateId, changeStatus) {
     this.statusCnt[targetTodo.status] -= 1;
     targetTodo.status = changeStatus;
     this.statusCnt[changeStatus] += 1;
+
     setTimeout(() => {
       this.msgObj.updateMsg(targetTodo);
       setTimeout(() => this.show("all"), 1000);
