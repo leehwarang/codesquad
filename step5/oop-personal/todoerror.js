@@ -29,8 +29,11 @@ TodoError.prototype.isValidMethodName = function(methodName, methodList) {
   }
 };
 
-//명령어에 $가 포함되어 있는지
-TodoError.prototype.includeSeperate = function() {};
+TodoError.prototype.includeSeperate = function(inputCommand, seperate) {
+  if (!inputCommand.includes(seperate)) {
+    throw new Error(this.msgObj.getNotIncludeSeperateMsg());
+  }
+};
 
 module.exports = TodoError;
 

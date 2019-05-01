@@ -37,4 +37,8 @@ PrintMsg.prototype.getMethodNameErrorMsg = function() {
   return "잘못된 명령어 입니다. show, add, update, delete 중 하나의 함수를 호출해주세요.";
 };
 
+PrintMsg.prototype.getNotIncludeSeperateMsg = function(){
+  return "명령어에 최소 1개 이상의 $를 넣어주세요."
+}
+
 module.exports = PrintMsg;

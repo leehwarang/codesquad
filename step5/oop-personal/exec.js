@@ -17,9 +17,10 @@ rl.setPrompt("명령어를 입력하세요. :");
 rl.prompt();
 
 rl.on("line", line => {
-  const methodName = line.split("$")[0];
-  const args = line.split("$").slice(1);
   try {
+    todoError.includeSeperate(line, "$");
+    const methodName = line.split("$")[0];
+    const args = line.split("$").slice(1);
     todoError.isValidMethodName(methodName, todoManager.methodList);
     todoManager[methodName](...args);
   } catch (error) {
