@@ -40,7 +40,7 @@
 
 ### 6. DOMContentLoaded라는 이벤트는 언제 발생하는가? load랑은 어떤 차이점이 있는가?
 
-- DOMContentLoaded 이벤트는 html parsing을 완료해서 최종 DOM tree가 완성 되었을 때 발생한다. (위에서 설멸 했듯이 FP 보다 느릴 수 있다)
+- DOMContentLoaded 이벤트는 html parsing을 완료해서 최종 DOM tree가 완성 되었을 때 발생한다. (위에서 설명 했듯이 FP 보다 느릴 수 있다)
 
 - load 이벤트는 모든 리소스가 로드 되었을 때 발생한다.
 
