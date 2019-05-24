@@ -8,11 +8,11 @@
 
 - 2-1. css
 
-  - head tag 내부에 하나의 css 파일로 분리되어 있다. 그래야 css parsing을 시작하는 시점이 빠르기 때문에 First Paint 시점에 css가 적용된 화면을 사용자에게 제공할 수 있는 확률이 높다.
+  - **head tag 내부에 하나의 css 파일로 분리되어 있다.** 그래야 css parsing을 시작하는 시점이 빠르기 때문에 First Paint 시점에 css가 적용된 화면을 사용자에게 제공할 수 있는 확률이 높다.
 
 - 2-2. script
 
-  - body tag 내부의 맨 아래에 있다. script는 render tree의 생성을 blocking 한다. render tree가 최종 완성된 다음 js가 실행하기 위해서 body tag 내부의 맨 아래에 삽입하는 것이 일반적이다.
+  - **body tag 내부의 맨 아래에 있다.** script는 render tree의 생성을 blocking 한다. render tree가 최종 완성된 다음 js가 실행하기 위해서 body tag 내부의 맨 아래에 삽입하는 것이 일반적이다.
 
 > 참고: Google Analytics 처럼 First Paint 이전에 실행 되어야 하는 script는 head tag 내부에 있다.
 
@@ -26,17 +26,17 @@
 
 - Request Header
 
-  - <img width="1298" alt="request header" src="https://user-images.githubusercontent.com/18614517/58308080-84576100-7e3b-11e9-9a1c-7b817fee480a.png">
+  <img width="1298" alt="request header" src="https://user-images.githubusercontent.com/18614517/58308080-84576100-7e3b-11e9-9a1c-7b817fee480a.png">
 
 - Response Header
 
-  - <img width="356" alt="response header" src="https://user-images.githubusercontent.com/18614517/58308099-96390400-7e3b-11e9-9367-e050207a47ec.png">
+  <img width="356" alt="response header" src="https://user-images.githubusercontent.com/18614517/58308099-96390400-7e3b-11e9-9367-e050207a47ec.png">
 
 ### 5. 화면에 보여지기 시작하는 시간은 언제인가?
 
 - 구글 퍼포먼스 탭의 First paint. **FP는 첫 번째 render tree가 완료된 후 처음 그려지는 시점** 이기 때문에 css parsing이 완료되기 전 또는 DOMContentLoaded 이전에도 가능하다. 되도록 FP 이전에 css parsing이 끝나서 사용자에게 보여지는 것이 좋기 때문에 css 파일을 head에 넣는 이유이다.
 
-- 참고: css parsing은 한 번 시작하면 중단되지 않고 완료된다.
+> 참고: css parsing은 한 번 시작하면 중단되지 않고 완료된다.
 
 ### 6. DOMContentLoaded라는 이벤트는 언제 발생하는가? load랑은 어떤 차이점이 있는가?
 
@@ -53,4 +53,4 @@
 - 5. layout
 - 6. paint
 
-위 과정이 반복적으로 실행된 후, DOM parsing이 완료되고 최종 render tree가 그려지면 body 바로 위에 있는 js 파일 실행
+위 과정이 반복적으로 실행된 후, HTML parsing이 완료되고 최종 render tree가 그려지면 body 바로 위에 있는 js 파일 실행
