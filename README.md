@@ -1,4 +1,4 @@
-# HTML-CSS-JS
+# Codesquad
 
 #### :muscle: _코드스쿼드(Codesquad)에서 공부하는 내용과 코드를 모아두는 레퍼지토리 입니다_.
 
